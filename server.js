@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
 
+
+//using middleware for parsing json requests
+app.use(express.json());
+
+//for in-memory storage
+let task = [];
+
 //routes
 
 app.get('/', (req, res)=> {
