@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const port = 3002;
 
 //using middleware for parsing json requests
 app.use(express.json());
@@ -11,45 +11,45 @@ let task = [];
 //the routes
 
 // Create a new task
-app.post('/tasks', (req, res) => {
-    const { title, description, status } = req.body;
-    const newTask = {
-        id: tasks.length + 1,
-        title,
-        description,
-        status
+app.post('/task', (req, res) => {
+    const { Title, Description, Status } = req.body;
+    const addTask = {
+        id: task.length + 1,
+        Title,
+        Description,
+        Status
     };
-    tasks.push(newTask);
-    res.status(201).json(newTask);
+    task.push(addTask);
+    res.status(200).json(addTask);
 });
 
 // Get all of the tasks
-app.get('/tasks', (req, res) => {
-    res.json(tasks);
+app.get('/task', (req, res) => {
+    res.json(task);
 });
 
 // Update a task by task ID
-app.put('/tasks/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const { title, description, status } = req.body;
-    const taskIndex = tasks.findIndex(task => task.id === taskId);
+app.put('/task/:id', (req, res) => {
+    const taskID = parseInt(req.params.id);
+    const { Title, Description, Status } = req.body;
+    const taskIndex = task.findIndex(task => task.id === taskID);
     if (taskIndex !== -1) {
-        tasks[taskIndex] = { ...tasks[taskIndex], title, description, status };
-        res.json(tasks[taskIndex]);
+        task[taskIndex] = { ...task[taskIndex], Title, Description, Status };
+        res.json(task[taskIndex]);
     } else {
-        res.status(404).json({ error: 'Task not found' });
+        res.status(404).json({ error: 'Task is not found :)' });
     }
 });
 
 // Delete a task by ID
-app.delete('/tasks/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    tasks = tasks.filter(task => task.id !== taskId);
-    res.status(204).end();
+app.delete('/task/:id', (req, res) => {
+    const taskID = parseInt(req.params.id);
+    task = task.filter(task => task.id !== taskID);
+    res.status(200).end();
 });
 
 // run server
-app.listen(PORT, () => {
-    console.log('Server is running on port 3000');
+app.listen(port, () => {
+    console.log('Server is running on port 3002');
 });
 
