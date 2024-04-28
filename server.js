@@ -4,14 +4,14 @@ const mysql = require('mysql');
 const port = 3002;
 
 //connection to mysql
-const con = mysql.createConnection({
+const connection= mysql.createConnection({
     host : 'localhost',
     user : 'root',
     password : '',
     database : 'tasks'
 });
 
-con.connect(function(err){
+connection.connect(function(err){
     if(err) throw err;
     console.log('Connected');
 
@@ -26,7 +26,6 @@ app.use(express.json());
 
 //the routes
 
-// Create a new task
 // app.post('/task', (req, res) => {
 //     const { Title, Description, Status } = req.body;
 //     const addTask = {
@@ -39,21 +38,21 @@ app.use(express.json());
 //     res.status(200).json(addTask);
 // });
 
+// Create a new task
 app.post('/task', (req, res) => {
     const { Title, Description, Status } = req.body;
     const sql = 'INSERT INTO task (Title, Description, Status) VALUES (?, ?, ?)';
     connection.query(sql, [Title, Description, Status], (err, result) => {
       if (err) {
         console.error('Error creating task:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(404).json({ error: 'Internal Server Error' });
         return;
       }
-      res.status(201).json({ User_ID: result.insertId, Title, Description, Status });
+      res.status(200).json({ User_ID: result.insertId, Title, Description, Status });
     });
   });
 
 // Get all of the tasks
-// 
 app.get('/task', (req, res) => {
     const sql = 'SELECT * FROM task';
     connection.query(sql, (err, results) => {
@@ -80,8 +79,10 @@ app.get('/task', (req, res) => {
 //     }
 // });
 
+
+// Update a task by task ID
 app.put('/task/:User_ID', (req, res) => {
-    const taskId = req.params.id;
+    const taskId = req.params.User_ID;
     const { Title, Description, Status } = req.body;
     const sql = 'UPDATE task SET Title = ?, Description = ?, Status = ? WHERE User_ID = ?';
     connection.query(sql, [Title, Description, Status, taskId], (err, result) => {
@@ -105,8 +106,9 @@ app.put('/task/:User_ID', (req, res) => {
 //     res.status(200).end();
 // });
 
+// Delete a task by ID
 app.delete('/task/:User_ID', (req, res) => {
-    const taskId = req.params.id;
+    const taskId = req.params.User_ID;
     const sql = 'DELETE FROM task WHERE User_ID = ?';
     connection.query(sql, taskId, (err, result) => {
       if (err) {
@@ -118,7 +120,7 @@ app.delete('/task/:User_ID', (req, res) => {
         res.status(404).json({ error: 'Task not found' });
         return;
       }
-      res.status(204).end();
+      res.status(200).end();
     });
   });
 
