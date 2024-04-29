@@ -48,6 +48,7 @@ app.post('/task', (req, res) => {
         res.status(404).json({ error: 'Internal Server Error' });
         return;
       }
+      // here User_ID is the task ID in initial code version
       res.status(200).json({ User_ID: result.insertId, Title, Description, Status });
     });
   });
