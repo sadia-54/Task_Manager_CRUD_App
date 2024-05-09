@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const mysql = require('mysql');
 const port = 3001; //running on port 3001
 
 
